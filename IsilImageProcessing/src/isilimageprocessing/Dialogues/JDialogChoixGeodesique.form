@@ -6,7 +6,6 @@
     <Property name="title" type="java.lang.String" value="Choix des param&#xe8;tres g&#xe9;od&#xe9;siques"/>
   </Properties>
   <AccessibilityProperties>
-    <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Choix des param&#xe8;tres g&#xe9;od&#xe9;siques"/>
     <Property name="AccessibleContext.accessibleDescription" type="java.lang.String" value=""/>
   </AccessibilityProperties>
   <SyntheticProperties>

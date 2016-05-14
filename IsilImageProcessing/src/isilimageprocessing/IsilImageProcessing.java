@@ -109,6 +109,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemFourierAfficherPartieImaginaire = new javax.swing.JMenuItem();
         jMenuHistogramme = new javax.swing.JMenu();
         jMenuHistogrammeAfficher = new javax.swing.JMenuItem();
+        jMenuIHistogrammeParametres = new javax.swing.JMenuItem();
+        jMenuHistogrammeTransformations = new javax.swing.JMenu();
+        jMenuItemLineaire = new javax.swing.JMenuItem();
+        jMenuItemLineaireSaturation = new javax.swing.JMenuItem();
+        jMenuItemGamma = new javax.swing.JMenuItem();
+        jMenuItemEgalisation = new javax.swing.JMenuItem();
+        jMenuItemNegatif = new javax.swing.JMenuItem();
         jMenuTraitementNonLineaire = new javax.swing.JMenu();
         jMenuElementaire = new javax.swing.JMenu();
         jMenuItemErosion = new javax.swing.JMenuItem();
@@ -305,6 +312,60 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             }
         });
         jMenuHistogramme.add(jMenuHistogrammeAfficher);
+
+        jMenuIHistogrammeParametres.setText("Paramètres image");
+        jMenuIHistogrammeParametres.setPreferredSize(new java.awt.Dimension(175, 37));
+        jMenuIHistogrammeParametres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuIHistogrammeParametresActionPerformed(evt);
+            }
+        });
+        jMenuHistogramme.add(jMenuIHistogrammeParametres);
+
+        jMenuHistogrammeTransformations.setText("Transformations");
+        jMenuHistogrammeTransformations.setPreferredSize(new java.awt.Dimension(55, 37));
+
+        jMenuItemLineaire.setText("Linéaire");
+        jMenuItemLineaire.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemLineaireActionPerformed(evt);
+            }
+        });
+        jMenuHistogrammeTransformations.add(jMenuItemLineaire);
+
+        jMenuItemLineaireSaturation.setText("Linéaire avec saturation");
+        jMenuItemLineaireSaturation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemLineaireSaturationActionPerformed(evt);
+            }
+        });
+        jMenuHistogrammeTransformations.add(jMenuItemLineaireSaturation);
+
+        jMenuItemGamma.setText("Gamma");
+        jMenuItemGamma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemGammaActionPerformed(evt);
+            }
+        });
+        jMenuHistogrammeTransformations.add(jMenuItemGamma);
+
+        jMenuItemEgalisation.setText("Égalisation");
+        jMenuItemEgalisation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEgalisationActionPerformed(evt);
+            }
+        });
+        jMenuHistogrammeTransformations.add(jMenuItemEgalisation);
+
+        jMenuItemNegatif.setText("Négatif");
+        jMenuItemNegatif.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemNegatifActionPerformed(evt);
+            }
+        });
+        jMenuHistogrammeTransformations.add(jMenuItemNegatif);
+
+        jMenuHistogramme.add(jMenuHistogrammeTransformations);
 
         jMenuBar1.add(jMenuHistogramme);
 
@@ -843,6 +904,143 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             System.err.println("Erreur NG : " + ex.getMessage());
         }
     }//GEN-LAST:event_jMenuItemFiltreMedianActionPerformed
+
+    private void jMenuIHistogrammeParametresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuIHistogrammeParametresActionPerformed
+        //créer la boite de dialogue pour l'affichage des paramètres de l'image
+        JDialogParametresImage dialog = new JDialogParametresImage(this, true);
+        int[][] matrice = new int[imageNG.getLargeur()][imageNG.getHauteur()];
+        
+        //récupérer la matrice de l'image
+        try
+        {
+            matrice = imageNG.getMatrice();
+        }
+        catch(CImageNGException ex)
+        {
+            System.err.println("Erreur NG : " + ex.getMessage());
+        }
+        
+        //récupérer les différents paramètres grâce aux méthodes développées
+        //passer les valeurs à la boite de dialogue
+        dialog.setMinimum(Histogramme.minimum(matrice));
+        dialog.setMaximum(Histogramme.maximum(matrice));
+        dialog.setLuminance(Histogramme.luminance(matrice));
+        dialog.setContraste1(Histogramme.contraste1(matrice));
+        dialog.setContraste2(Histogramme.contraste2(matrice));
+        
+        //afficher la boite de dialogue
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jMenuIHistogrammeParametresActionPerformed
+
+    private void jMenuItemLineaireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLineaireActionPerformed
+        JDialogTransformationsHistogramme jdth = null;
+        
+        try
+        {
+            //créer la boite de dialoque de transformation d'histogramme
+            jdth = new JDialogTransformationsHistogramme(this, true, 
+                    imageNG.getMatrice(), JDialogTransformationsHistogramme.LIN);
+            
+            //afficher la boite de dialogue
+            jdth.setVisible(true);
+            
+            //récupérer l'image modifiée pour l'afficher si on a quitté avec OK
+            if(jdth.isDisplayable())
+                imageNG.setMatrice(jdth.getImageAfter());
+        }
+        catch(CImageNGException ex)
+        {
+            System.err.println("Erreur NG : " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemLineaireActionPerformed
+
+    private void jMenuItemLineaireSaturationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLineaireSaturationActionPerformed
+        JDialogTransformationsHistogramme jdth = null;
+        
+        try
+        {
+            //créer la boite de dialoque de transformation d'histogramme
+            jdth = new JDialogTransformationsHistogramme(this, true, 
+                    imageNG.getMatrice(), JDialogTransformationsHistogramme.LIN_SAT);
+            
+            //afficher la boite de dialogue
+            jdth.setVisible(true);
+            
+            //récupérer l'image modifiée pour l'afficher si on a quitté avec OK
+            if(jdth.isDisplayable())
+                imageNG.setMatrice(jdth.getImageAfter());
+        }
+        catch(CImageNGException ex)
+        {
+            System.err.println("Erreur NG : " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemLineaireSaturationActionPerformed
+
+    private void jMenuItemGammaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemGammaActionPerformed
+        JDialogTransformationsHistogramme jdth = null;
+        
+        try
+        {
+            //créer la boite de dialoque de transformation d'histogramme
+            jdth = new JDialogTransformationsHistogramme(this, true, 
+                    imageNG.getMatrice(), JDialogTransformationsHistogramme.GAMMA);
+            
+            //afficher la boite de dialogue
+            jdth.setVisible(true);
+            
+            //récupérer l'image modifiée pour l'afficher si on a quitté avec OK
+            if(jdth.isDisplayable())
+                imageNG.setMatrice(jdth.getImageAfter());
+        }
+        catch(CImageNGException ex)
+        {
+            System.err.println("Erreur NG : " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemGammaActionPerformed
+
+    private void jMenuItemEgalisationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEgalisationActionPerformed
+        JDialogTransformationsHistogramme jdth = null;
+        
+        try
+        {
+            //créer la boite de dialoque de transformation d'histogramme
+            jdth = new JDialogTransformationsHistogramme(this, true, 
+                    imageNG.getMatrice(), JDialogTransformationsHistogramme.EGALI);
+            
+            //afficher la boite de dialogue
+            jdth.setVisible(true);
+            
+            //récupérer l'image modifiée pour l'afficher si on a quitté avec OK
+            if(jdth.isDisplayable())
+                imageNG.setMatrice(jdth.getImageAfter());
+        }
+        catch(CImageNGException ex)
+        {
+            System.err.println("Erreur NG : " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemEgalisationActionPerformed
+
+    private void jMenuItemNegatifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNegatifActionPerformed
+        JDialogTransformationsHistogramme jdth = null;
+        
+        try
+        {
+            //créer la boite de dialoque de transformation d'histogramme
+            jdth = new JDialogTransformationsHistogramme(this, true, 
+                    imageNG.getMatrice(), JDialogTransformationsHistogramme.NEGATIF);
+            
+            //afficher la boite de dialogue
+            jdth.setVisible(true);
+            
+            //récupérer l'image modifiée pour l'afficher si on a quitté avec OK
+            if(jdth.isDisplayable())
+                imageNG.setMatrice(jdth.getImageAfter());
+        }
+        catch(CImageNGException ex)
+        {
+            System.err.println("Erreur NG : " + ex.getMessage());
+        }
+    }//GEN-LAST:event_jMenuItemNegatifActionPerformed
     
     /**
      * @param args the command line arguments
@@ -979,10 +1177,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuFourierAfficher;
     private javax.swing.JMenu jMenuHistogramme;
     private javax.swing.JMenuItem jMenuHistogrammeAfficher;
+    private javax.swing.JMenu jMenuHistogrammeTransformations;
+    private javax.swing.JMenuItem jMenuIHistogrammeParametres;
     private javax.swing.JMenu jMenuImage;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
     private javax.swing.JMenuItem jMenuItemDilatation;
     private javax.swing.JMenuItem jMenuItemDilatationGeodesique;
+    private javax.swing.JMenuItem jMenuItemEgalisation;
     private javax.swing.JMenuItem jMenuItemEnregistrerSous;
     private javax.swing.JMenuItem jMenuItemErosion;
     private javax.swing.JMenuItem jMenuItemFermeture;
@@ -991,6 +1192,10 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieImaginaire;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPartieReelle;
     private javax.swing.JMenuItem jMenuItemFourierAfficherPhase;
+    private javax.swing.JMenuItem jMenuItemGamma;
+    private javax.swing.JMenuItem jMenuItemLineaire;
+    private javax.swing.JMenuItem jMenuItemLineaireSaturation;
+    private javax.swing.JMenuItem jMenuItemNegatif;
     private javax.swing.JMenuItem jMenuItemNouvelleNG;
     private javax.swing.JMenuItem jMenuItemNouvelleRGB;
     private javax.swing.JMenuItem jMenuItemOuverture;

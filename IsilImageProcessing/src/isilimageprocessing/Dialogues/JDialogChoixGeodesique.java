@@ -2,7 +2,6 @@ package isilimageprocessing.Dialogues;
 
 import CImage.CImageNG;
 import CImage.Exceptions.CImageNGException;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.ImageIcon;

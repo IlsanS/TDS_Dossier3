@@ -8,7 +8,7 @@ public class MorphoElementaire
     {
         int xSize=image.length;
         int ySize=image[0].length;
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         boolean isBinary;
         
         isBinary = isBinary(image);
@@ -16,22 +16,22 @@ public class MorphoElementaire
         if(isBinary)
         {
             System.out.println("Erosion : image binaire");
-            imageNewPixels = erosionBinaire(image, tailleElemStruct);
+            imageNew = erosionBinaire(image, tailleElemStruct);
         }
         else
         {
             System.out.println("Erosion : image niveaux gris");
-            imageNewPixels = erosionNiveauxGris(image, tailleElemStruct);  
+            imageNew = erosionNiveauxGris(image, tailleElemStruct);  
         }
         
-        return imageNewPixels;
+        return imageNew;
     }
     
     public static int[][] erosionBinaire(int[][] image, int tailleElemStruct) throws CImageNGException
     {
         int xSize=image.length;
         int ySize=image[0].length;
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         boolean included;
         
         for(int yImage=0; yImage<ySize; yImage++)
@@ -57,18 +57,18 @@ public class MorphoElementaire
                 }
 
                 if(included)
-                    imageNewPixels[xImage][yImage] = 0;
-                else imageNewPixels[xImage][yImage] = 255;
+                    imageNew[xImage][yImage] = 0;
+                else imageNew[xImage][yImage] = 255;
             }
         }
-        return imageNewPixels;
+        return imageNew;
     }
     
     public static int[][] erosionNiveauxGris(int[][] image, int tailleElemStruct) throws CImageNGException
     {
         int xSize=image.length;
         int ySize=image[0].length;
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         int pixelValue;
         int minimum;
         
@@ -89,18 +89,18 @@ public class MorphoElementaire
                         }
                     }
                 }
-                imageNewPixels[xImage][yImage] = minimum;
+                imageNew[xImage][yImage] = minimum;
             }
         }
         
-        return imageNewPixels;
+        return imageNew;
     }
     
     public static int[][] dilatation(int[][] image, int tailleElemStruct) throws CImageNGException
     {
         int xSize=image.length;
         int ySize=image[0].length;
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         boolean isBinary;
         
         isBinary = isBinary(image);
@@ -108,22 +108,22 @@ public class MorphoElementaire
         if(isBinary)
         {
             System.out.println("Dilatation : image binaire");
-            imageNewPixels = dilatationBinaire(image, tailleElemStruct);
+            imageNew = dilatationBinaire(image, tailleElemStruct);
         }
         else
         {
             System.out.println("Dilatation : image niveaux gris");
-            imageNewPixels = dilatationNiveauxGris(image, tailleElemStruct);  
+            imageNew = dilatationNiveauxGris(image, tailleElemStruct);  
         }
         
-        return imageNewPixels;
+        return imageNew;
     }
     
     public static int[][] dilatationBinaire(int[][] image, int tailleElemStruct) throws CImageNGException
     {
         int xSize=image.length;
         int ySize=image[0].length;
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         boolean touch;
         
         for(int yImage=0; yImage<ySize; yImage++)
@@ -148,19 +148,19 @@ public class MorphoElementaire
                         break;
                 }
                 if(touch)
-                    imageNewPixels[xImage][yImage] = 0;
-                else imageNewPixels[xImage][yImage] = 255;
+                    imageNew[xImage][yImage] = 0;
+                else imageNew[xImage][yImage] = 255;
             }
         }
         
-        return imageNewPixels;
+        return imageNew;
     }
     
     public static int[][] dilatationNiveauxGris(int[][] image, int tailleElemStruct) throws CImageNGException
     {
         int xSize=image.length;
         int ySize=image[0].length;
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         int pixelValue;
         int maximum;
         
@@ -181,18 +181,18 @@ public class MorphoElementaire
                         }
                     }
                 }
-                imageNewPixels[xImage][yImage] = maximum;
+                imageNew[xImage][yImage] = maximum;
             }
         }
         
-        return imageNewPixels;
+        return imageNew;
     }
     
     public static int[][] ouverture(int[][] image, int tailleElemStruct) throws CImageNGException
     {
         int xSize=image.length;
         int ySize=image[0].length;
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         boolean isBinary;
         
         isBinary = isBinary(image);
@@ -200,24 +200,24 @@ public class MorphoElementaire
         if(isBinary)
         {
             System.out.println("Ouverture : image binaire");
-            imageNewPixels = erosionBinaire(image, tailleElemStruct);
-            imageNewPixels = dilatationBinaire(imageNewPixels, tailleElemStruct);
+            imageNew = erosionBinaire(image, tailleElemStruct);
+            imageNew = dilatationBinaire(imageNew, tailleElemStruct);
         }
         else
         {
             System.out.println("Ouverture : image niveaux gris");
-            imageNewPixels = erosionNiveauxGris(image, tailleElemStruct);
-            imageNewPixels = dilatationNiveauxGris(imageNewPixels, tailleElemStruct);
+            imageNew = erosionNiveauxGris(image, tailleElemStruct);
+            imageNew = dilatationNiveauxGris(imageNew, tailleElemStruct);
         }
         
-        return imageNewPixels;
+        return imageNew;
     }
     
     public static int[][] fermeture(int[][] image, int tailleElemStruct) throws CImageNGException
     {
         int xSize=image.length;
         int ySize=image[0].length;
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         boolean isBinary;
         
         isBinary = isBinary(image);
@@ -225,17 +225,17 @@ public class MorphoElementaire
         if(isBinary)
         {
             System.out.println("Fermeture : image binaire");
-            imageNewPixels = dilatationBinaire(image, tailleElemStruct);
-            imageNewPixels = erosionBinaire(imageNewPixels, tailleElemStruct);
+            imageNew = dilatationBinaire(image, tailleElemStruct);
+            imageNew = erosionBinaire(imageNew, tailleElemStruct);
         }
         else
         {
             System.out.println("Fermeture : image niveaux gris");
-            imageNewPixels = dilatationNiveauxGris(image, tailleElemStruct);
-            imageNewPixels = erosionNiveauxGris(imageNewPixels, tailleElemStruct);
+            imageNew = dilatationNiveauxGris(image, tailleElemStruct);
+            imageNew = erosionNiveauxGris(imageNew, tailleElemStruct);
         }
         
-        return imageNewPixels;
+        return imageNew;
     }
     
     

@@ -11,39 +11,39 @@ public class MorphoComplexe
     {
         int xSize=image.length;
         int ySize=image[0].length;
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         
         System.out.println("Dilatation géodésique");
         for(int i=0; i<nbIter; i++)
         {
             if(i==0)
-                imageNewPixels = MorphoElementaire.dilatationBinaire(image, tailleElemStruct);
+                imageNew = MorphoElementaire.dilatationBinaire(image, tailleElemStruct);
             else
-                imageNewPixels = MorphoElementaire.dilatationBinaire(imageNewPixels, tailleElemStruct);  
+                imageNew = MorphoElementaire.dilatationBinaire(imageNew, tailleElemStruct);  
             
-            imageNewPixels = masqueGeodesique(imageNewPixels, masqueGeodesique);
+            imageNew = masqueGeodesique(imageNew, masqueGeodesique);
         }       
         
-        return imageNewPixels;
+        return imageNew;
     }
     
     private static int[][] masqueGeodesique(int[][] image, int[][] masqueGeodesique)
     {
         int xSize=image.length;
         int ySize=image[0].length;
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         
         for(int yImage=0; yImage<ySize; yImage++)
         {
             for(int xImage=0; xImage<xSize; xImage++)
             {
                 if(masqueGeodesique[xImage][yImage] == 0)
-                    imageNewPixels[xImage][yImage] = image[xImage][yImage];
-                else imageNewPixels[xImage][yImage] = 255;
+                    imageNew[xImage][yImage] = image[xImage][yImage];
+                else imageNew[xImage][yImage] = 255;
             }
         }
         
-        return imageNewPixels;
+        return imageNew;
     }
     
     public static int[][] reconstructionGeodesique(
@@ -52,29 +52,29 @@ public class MorphoComplexe
         int xSize=image.length;
         int ySize=image[0].length;
         int[][] imageTmp = new int[xSize][ySize];
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         int i = 0;
         
         System.out.println("Reconstruction géodésique");       
-        imageNewPixels = image;
+        imageNew = image;
         while(true)
         {
-            imageTmp = imageNewPixels;
-            imageNewPixels = dilatationGeodesique(imageNewPixels, masqueGeodesique, tailleElemStruct, 1);
+            imageTmp = imageNew;
+            imageNew = dilatationGeodesique(imageNew, masqueGeodesique, tailleElemStruct, 1);
             i++;
-            if(areEqual(imageTmp, imageNewPixels))
+            if(areEqual(imageTmp, imageNew))
                 break;
         }
         System.out.println("Reconstruction réalisée en " + i + " itérations");
         
-        return imageNewPixels;
+        return imageNew;
     }
     
     public static int[][] filtreMedian(int[][] image, int tailleElemStruct)
     {
         int xSize=image.length;
         int ySize=image[0].length;
-        int[][] imageNewPixels = new int[xSize][ySize];
+        int[][] imageNew = new int[xSize][ySize];
         int[] pixelsStruct = new int[tailleElemStruct*tailleElemStruct];
         int medianValue;
         int pixelValue;
@@ -99,11 +99,11 @@ public class MorphoComplexe
                 }
                 pixelsStruct = orderPixels(pixelsStruct);
                 medianValue = pixelsStruct[((tailleElemStruct*tailleElemStruct)+1)/2];
-                imageNewPixels[xImage][yImage] = medianValue;
+                imageNew[xImage][yImage] = medianValue;
             }
         }
         
-        return imageNewPixels;
+        return imageNew;
     }
     
     public static boolean areEqual(int[][] image1, int[][] image2)
