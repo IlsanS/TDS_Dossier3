@@ -418,11 +418,11 @@ public class CImageRGB extends CImage
             for(int j=0 ; j<hauteur ; j++)
             {
                 if (red[i][j] < 0 || red[i][j] > 255)
-                    throw new CImageRGBException("Valeur(s) invalide(s) dans matrices RGB");
+                    throw new CImageRGBException("Valeur(s) invalide(s) dans matrices rouge");
                 if (green[i][j] < 0 || green[i][j] > 255)
-                    throw new CImageRGBException("Valeur(s) invalide(s) dans matrices RGB");
+                    throw new CImageRGBException("Valeur(s) invalide(s) dans matrices verte");
                 if (blue[i][j] < 0 || blue[i][j] > 255)
-                    throw new CImageRGBException("Valeur(s) invalide(s) dans matrices RGB");
+                    throw new CImageRGBException("Valeur(s) invalide(s) dans matrices bleue");
                 Color c = new Color(red[i][j],green[i][j],blue[i][j]);
                 setPixel(i,j,c);
             }

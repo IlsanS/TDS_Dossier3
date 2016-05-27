@@ -13,13 +13,18 @@ import CImage.Observers.Events.*;
 import ImageProcessing.Complexe.MatriceComplexe;
 import ImageProcessing.Fourier.Fourier;
 import ImageProcessing.Histogramme.Histogramme;
+import ImageProcessing.Contours.*;
+
 import ImageProcessing.Lineaire.FiltrageLinaireGlobal;
 import ImageProcessing.Lineaire.FiltrageLineaireLocal;
 import ImageProcessing.NonLineaire.MorphoComplexe;
 import ImageProcessing.NonLineaire.MorphoElementaire;
+import ImageProcessing.Seuillage.Seuillage;
 import isilimageprocessing.Dialogues.*;
 import java.awt.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
@@ -45,7 +50,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private int   tailleElemStruct = 1;
     private int[][] masqueGeodesique;
     private int   iterations = 1;
-    
+    private int[][] Rimg;
+    private int[][] Gimg;
+    private int[][] Bimg;
+
+     
     /** Creates new form TestCImage2 */
     public IsilImageProcessing() 
     {
@@ -82,6 +91,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private void initComponents() {
 
         buttonGroupDessiner = new javax.swing.ButtonGroup();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jScrollPane = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuImage = new javax.swing.JMenu();
@@ -137,6 +147,23 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuLocal = new javax.swing.JMenu();
         jMenuConvo = new javax.swing.JMenuItem();
         jMenuMoyenneur = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
+        butcher = new javax.swing.JMenuItem();
+        nonlineairelaplacien = new javax.swing.JMenuItem();
+        gradienterosion = new javax.swing.JMenuItem();
+        gradientDilatation = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        Prewitt = new javax.swing.JMenuItem();
+        LaPlacien4 = new javax.swing.JMenuItem();
+        LaPlacien8 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+
+        jMenuItem4.setText("jMenuItem4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TestCImage3");
@@ -511,6 +538,110 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuLineaire);
 
+        jMenu1.setText("Contours ");
+
+        jMenu4.setText("Non Lineaire");
+
+        butcher.setText("Gradient Btucher");
+        butcher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                butcherActionPerformed(evt);
+            }
+        });
+        jMenu4.add(butcher);
+
+        nonlineairelaplacien.setText("Laplacien non lieaire");
+        nonlineairelaplacien.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nonlineairelaplacienActionPerformed(evt);
+            }
+        });
+        jMenu4.add(nonlineairelaplacien);
+
+        gradienterosion.setText("Gradient érosion");
+        gradienterosion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gradienterosionActionPerformed(evt);
+            }
+        });
+        jMenu4.add(gradienterosion);
+
+        gradientDilatation.setText("Gradient dilation");
+        gradientDilatation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gradientDilatationActionPerformed(evt);
+            }
+        });
+        jMenu4.add(gradientDilatation);
+
+        jMenu1.add(jMenu4);
+
+        jMenu3.setText("Lineaire");
+
+        jMenuItem1.setText("Grandient Sobel");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem1);
+
+        Prewitt.setText("Gradient Prewitt");
+        Prewitt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PrewittActionPerformed(evt);
+            }
+        });
+        jMenu3.add(Prewitt);
+
+        LaPlacien4.setText("Laplacien4");
+        LaPlacien4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LaPlacien4ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(LaPlacien4);
+
+        LaPlacien8.setText("Laplacien 8");
+        LaPlacien8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LaPlacien8ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(LaPlacien8);
+
+        jMenu1.add(jMenu3);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Seuillage");
+
+        jMenuItem3.setText("Simple");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
+        jMenuItem5.setText("Double");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem5);
+
+        jMenuItem2.setText("Automatique");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -519,18 +650,18 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 785, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(716, 400));
+        setSize(new java.awt.Dimension(825, 400));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1118,49 +1249,77 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         dialog.setVisible(true);
 
         int fc = dialog.getFrequenceCoupure();
-        try
+   
+        
+           try
         {
             int[][] img;
             if(imageNG == null)
             {
-                img = imageRGB.getCImageNG().getMatrice();
+                splitMatrice(imageRGB);
+                CImageRGB im = new CImageRGB(FiltrageLinaireGlobal.PasseBasIdeal(Rimg,fc),
+                        FiltrageLinaireGlobal.PasseBasIdeal(Gimg,fc),
+                        FiltrageLinaireGlobal.PasseBasIdeal(Bimg,fc)
+                );
+             JDialogShowImage dialog2 = new JDialogShowImage(this, false, im);
+               dialog2.setVisible(true);
+                
             }
             else
             {
                 img = imageNG.getMatrice();
+                  img = FiltrageLinaireGlobal.PasseBasIdeal(img, fc);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
             }
 
-            img = FiltrageLinaireGlobal.PasseBasIdeal(img, fc);
-
-            JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
-            dialog2.setVisible(true);
+              
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       } catch (CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
-        catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); }
+ 
+
+ 
     }//GEN-LAST:event_jMenuPBActionPerformed
 
     private void jMenuPHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuPHActionPerformed
-     JDialogChoixParamètreFiltre dialog = new JDialogChoixParamètreFiltre(this, true, false);
+       JDialogChoixParamètreFiltre dialog = new JDialogChoixParamètreFiltre(this, true, false);
         dialog.setVisible(true);
 
         int fc = dialog.getFrequenceCoupure();
-        try
+   
+        
+           try
         {
             int[][] img;
             if(imageNG == null)
             {
-                img = imageRGB.getCImageNG().getMatrice();
+                splitMatrice(imageRGB);
+                CImageRGB im = new CImageRGB(FiltrageLinaireGlobal.PasseHautIdeal(Rimg,fc),
+                        FiltrageLinaireGlobal.PasseHautIdeal(Gimg,fc),
+                        FiltrageLinaireGlobal.PasseHautIdeal(Bimg,fc)
+                );
+             JDialogShowImage dialog2 = new JDialogShowImage(this, false, im);
+               dialog2.setVisible(true);
+                
             }
             else
             {
                 img = imageNG.getMatrice();
+                img = FiltrageLinaireGlobal.PasseHautIdeal(img, fc);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
             }
 
-            img = FiltrageLinaireGlobal.PasseHautIdeal(img, fc);
-
-            JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
-            dialog2.setVisible(true);
+              
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       } catch (CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
-        catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); }
+ 
     }//GEN-LAST:event_jMenuPHActionPerformed
 
     private void jMenuPBButterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuPBButterActionPerformed
@@ -1168,51 +1327,74 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         dialog.setVisible(true);
 
         int fc = dialog.getFrequenceCoupure();
-        int ordre=dialog.getOrdre();
-        try
+        int ordre=dialog.getOrdre();        
+           try
         {
             int[][] img;
             if(imageNG == null)
             {
-                img = imageRGB.getCImageNG().getMatrice();
+                splitMatrice(imageRGB);
+                CImageRGB im = new CImageRGB(FiltrageLinaireGlobal.PasseBasButterworth(Rimg,fc,ordre),
+                        FiltrageLinaireGlobal.PasseBasButterworth(Gimg,fc,ordre),
+                        FiltrageLinaireGlobal.PasseBasButterworth(Bimg,fc,ordre)
+                );
+             JDialogShowImage dialog2 = new JDialogShowImage(this, false, im);
+               dialog2.setVisible(true);
+                
             }
             else
             {
                 img = imageNG.getMatrice();
+                img = FiltrageLinaireGlobal.PasseBasButterworth(img,fc,ordre);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
             }
 
-            img = FiltrageLinaireGlobal.PasseBasButterworth(img, fc, ordre);
-
-            JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
-            dialog2.setVisible(true);
+              
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       } catch (CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
         }
-        catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); }
+ 
     }//GEN-LAST:event_jMenuPBButterActionPerformed
 
     private void jMenuPHButterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuPHButterActionPerformed
-            JDialogChoixParamètreFiltre dialog = new JDialogChoixParamètreFiltre(this, true, true);
+        JDialogChoixParamètreFiltre dialog = new JDialogChoixParamètreFiltre(this, true, true);
         dialog.setVisible(true);
 
         int fc = dialog.getFrequenceCoupure();
-        int ordre=dialog.getOrdre();
-        try
+        int ordre=dialog.getOrdre();        
+           try
         {
             int[][] img;
             if(imageNG == null)
             {
-                img = imageRGB.getCImageNG().getMatrice();
+                splitMatrice(imageRGB);
+                CImageRGB im = new CImageRGB(FiltrageLinaireGlobal.PasseHautButterworth(Rimg,fc,ordre),
+                        FiltrageLinaireGlobal.PasseHautButterworth(Gimg,fc,ordre),
+                        FiltrageLinaireGlobal.PasseHautButterworth(Bimg,fc,ordre)
+                );
+             JDialogShowImage dialog2 = new JDialogShowImage(this, false, im);
+               dialog2.setVisible(true);
+                
             }
             else
             {
                 img = imageNG.getMatrice();
+                img = FiltrageLinaireGlobal.PasseHautButterworth(img,fc,ordre);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
             }
 
-            img = FiltrageLinaireGlobal.PasseHautButterworth(img, fc, ordre);
-
-            JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
-            dialog2.setVisible(true);
-        }
-        catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); }
+              
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       } catch (CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        
+ 
+    }   
     }//GEN-LAST:event_jMenuPHButterActionPerformed
 
     private void jMenuConvoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuConvoActionPerformed
@@ -1225,19 +1407,26 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
             int[][] img;
             if(imageNG == null)
             {
-                img = imageRGB.getCImageNG().getMatrice();
+                splitMatrice(imageRGB);
+                CImageRGB im = new CImageRGB(FiltrageLineaireLocal.filtreMasqueConvolution(Rimg, masque),
+                       FiltrageLineaireLocal.filtreMasqueConvolution(Gimg, masque),
+                       FiltrageLineaireLocal.filtreMasqueConvolution(Bimg, masque)
+                );
+             JDialogShowImage dialog2 = new JDialogShowImage(this, false, im);
+               dialog2.setVisible(true);
+                
             }
             else
             {
                 img = imageNG.getMatrice();
+                img =FiltrageLineaireLocal.filtreMasqueConvolution(img, masque);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
             }
-
-            img = FiltrageLineaireLocal.filtreMasqueConvolution(img, masque);
-
-            JDialogShowImage dis = new JDialogShowImage(this, false, new CImageNG(img));
-            dis.setVisible(true);
         }
-        catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); }
+        catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); } catch (CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuConvoActionPerformed
 
     private void jMenuMoyenneurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMoyenneurActionPerformed
@@ -1245,6 +1434,39 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         dialog.setVisible(true);
 
         int taille = dialog.getTaille();
+
+        try
+        {
+            int[][] img;
+            if(imageNG == null)
+            {
+                splitMatrice(imageRGB);
+                CImageRGB im = new CImageRGB(FiltrageLineaireLocal.filtreMoyenneur(Rimg, taille),
+                       FiltrageLineaireLocal.filtreMoyenneur(Gimg, taille),
+                       FiltrageLineaireLocal.filtreMoyenneur(Bimg, taille)
+                );
+             JDialogShowImage dialog2 = new JDialogShowImage(this, false, im);
+               dialog2.setVisible(true);
+                
+            }
+            else
+            {
+                img = imageNG.getMatrice();
+                img =FiltrageLineaireLocal.filtreMoyenneur(img, taille);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
+            }
+        }
+        catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); } catch (CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuMoyenneurActionPerformed
+
+    private void PrewittActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrewittActionPerformed
+        JDialogChoixOrientationContour dialog = new JDialogChoixOrientationContour(this,true);
+        dialog.setVisible(true);
+
+        int dir = dialog.getOrientation();
         try
         {
             int[][] img;
@@ -1257,14 +1479,356 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 img = imageNG.getMatrice();
             }
 
-                img = FiltrageLineaireLocal.filtreMoyenneur(img, taille);
-
+                img = ContoursLineaire.gradientPrewitt(img, dir);
                 JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
                 dialog2.setVisible(true);
             }
             catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
        }
-    }//GEN-LAST:event_jMenuMoyenneurActionPerformed
+    }//GEN-LAST:event_PrewittActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+
+ JDialogChoixOrientationContour dialog = new JDialogChoixOrientationContour(this,true);
+        dialog.setVisible(true);
+
+        int dir = dialog.getOrientation();
+        try
+        {
+            int[][] img;
+            if(imageNG == null)
+            {
+                img = imageRGB.getCImageNG().getMatrice();
+            }
+            else
+            {
+                img = imageNG.getMatrice();
+            }
+
+                img = ContoursLineaire.gradientSobel(img, dir);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       }
+
+
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void LaPlacien4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LaPlacien4ActionPerformed
+
+        try
+        {
+            int[][] img;
+            if(imageNG == null)
+            {
+                img = imageRGB.getCImageNG().getMatrice();
+            }
+            else
+            {
+                img = imageNG.getMatrice();
+            }
+
+                img = ContoursLineaire.laplacien4(img);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       }
+
+        
+        
+        
+        
+    }//GEN-LAST:event_LaPlacien4ActionPerformed
+
+    private void LaPlacien8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LaPlacien8ActionPerformed
+     try
+        {
+            int[][] img;
+            if(imageNG == null)
+            {
+                img = imageRGB.getCImageNG().getMatrice();
+            }
+            else
+            {
+                img = imageNG.getMatrice();
+            }
+
+                img = ContoursLineaire.laplacien8(img);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       }
+
+        
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_LaPlacien8ActionPerformed
+
+    private void butcherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butcherActionPerformed
+ try
+        {
+           
+            int[][] img;
+            if(imageNG == null)
+            {
+                splitMatrice(imageRGB);
+                CImageRGB im = new CImageRGB(ContoursNonLineaire.gradientBeucher(Rimg),
+                      ContoursNonLineaire.gradientBeucher(Gimg),
+                      ContoursNonLineaire.gradientBeucher(Bimg)
+                );
+             JDialogShowImage dialog2 = new JDialogShowImage(this, false, im);
+               dialog2.setVisible(true);
+                
+            }
+            else
+            {
+                img = imageNG.getMatrice();
+                img = ContoursNonLineaire.gradientBeucher(img);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
+            }
+        }
+
+         
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       } catch (CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+        
+        
+
+
+
+
+
+
+
+    }//GEN-LAST:event_butcherActionPerformed
+
+    private void nonlineairelaplacienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nonlineairelaplacienActionPerformed
+   
+        
+         try
+        {
+           int[][] img;
+            if(imageNG == null)
+            {
+                splitMatrice(imageRGB);
+                CImageRGB im = new CImageRGB(ContoursNonLineaire.laplacienNonLineaire(Rimg),
+                      ContoursNonLineaire.laplacienNonLineaire(Gimg),
+                      ContoursNonLineaire.laplacienNonLineaire(Bimg)
+                );
+             JDialogShowImage dialog2 = new JDialogShowImage(this, false, im);
+               dialog2.setVisible(true);
+                
+            }
+            else
+            {
+                img = imageNG.getMatrice();
+                img = ContoursNonLineaire.laplacienNonLineaire(img);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
+            }
+
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       } catch (CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_nonlineairelaplacienActionPerformed
+
+    private void gradienterosionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradienterosionActionPerformed
+
+     try
+        {
+            int[][] img;
+            if(imageNG == null)
+            {
+                splitMatrice(imageRGB);
+                CImageRGB im = new CImageRGB(ContoursNonLineaire.gradientErosion(Rimg),
+                      ContoursNonLineaire.gradientErosion(Gimg),
+                      ContoursNonLineaire.gradientErosion(Bimg)
+                );
+             JDialogShowImage dialog2 = new JDialogShowImage(this, false, im);
+               dialog2.setVisible(true);
+                
+            }
+            else
+            {
+                img = imageNG.getMatrice();
+                img = ContoursNonLineaire.gradientErosion(img);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
+            }
+
+                
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       } catch (CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+
+
+
+
+
+
+
+
+
+    }//GEN-LAST:event_gradienterosionActionPerformed
+
+    private void gradientDilatationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradientDilatationActionPerformed
+
+            try
+        {
+              int[][] img;
+            if(imageNG == null)
+            {
+                splitMatrice(imageRGB);
+                CImageRGB im = new CImageRGB(ContoursNonLineaire.gradientDilatation(Rimg),
+                      ContoursNonLineaire.gradientDilatation(Gimg),
+                      ContoursNonLineaire.gradientDilatation(Bimg)
+                );
+             JDialogShowImage dialog2 = new JDialogShowImage(this, false, im);
+               dialog2.setVisible(true);
+                
+            }
+            else
+            {
+                img = imageNG.getMatrice();
+                img = ContoursNonLineaire.gradientDilatation(img);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
+            }
+
+               
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       } catch (CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_gradientDilatationActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+       
+        JDialogChoixSeuillage n = new JDialogChoixSeuillage(this, true, true);
+          n.setVisible(true);
+        int seuil= n.getSeuil1();
+        int seuil2=n.getSeuil2();
+        
+           try
+        {
+            int[][] img;
+            if(imageNG == null)
+            {
+                img = imageRGB.getCImageNG().getMatrice();
+            }
+            else
+            {
+                img = imageNG.getMatrice();
+            }
+
+                img = Seuillage.seuillageDouble(img, seuil, seuil2);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       }
+ 
+
+        
+        
+        
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+
+        JDialogChoixSeuillage n = new JDialogChoixSeuillage(this, true, false);
+        n.setVisible(true);
+        int seuil= n.getSeuil1();
+  
+  
+           try
+        {
+            int[][] img;
+            if(imageNG == null)
+            {
+                img = imageRGB.getCImageNG().getMatrice();
+            }
+            else
+            {
+                img = imageNG.getMatrice();
+            }
+
+                img = Seuillage.seuillageSimple(img, seuil);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       }
+        
+        
+        
+
+
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        
+
+           try
+        {
+            int[][] img;
+            if(imageNG == null)
+            {
+                img = imageRGB.getCImageNG().getMatrice();
+            }
+            else
+            {
+                img = imageNG.getMatrice();
+            }
+
+                img = Seuillage.seuillageAutomatique(img);
+                JDialogShowImage dialog2 = new JDialogShowImage(this, false, new CImageNG(img));
+                dialog2.setVisible(true);
+            }
+            catch (CImageNGException ex) { JOptionPane.showMessageDialog(this, ex.getMessage()); 
+       }
+
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1385,14 +1949,33 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
     }
     
+    private void splitMatrice(CImageRGB im) throws CImageRGBException, CImageNGException
+    {
+        Rimg = new int[im.getLargeur()][im.getHauteur()];
+        Gimg = new int[im.getLargeur()][im.getHauteur()];
+        Bimg = new int[im.getLargeur()][im.getHauteur()];
+        im.getMatricesRGB(Rimg, Gimg, Bimg);
+   
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem LaPlacien4;
+    private javax.swing.JMenuItem LaPlacien8;
+    private javax.swing.JMenuItem Prewitt;
+    private javax.swing.JMenuItem butcher;
     private javax.swing.ButtonGroup buttonGroupDessiner;
+    private javax.swing.JMenuItem gradientDilatation;
+    private javax.swing.JMenuItem gradienterosion;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerCercle;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerCerclePlein;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerLigne;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerPixel;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerRectangle;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerRectanglePlein;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuComplexe;
     private javax.swing.JMenuItem jMenuConvo;
@@ -1406,6 +1989,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuHistogrammeTransformations;
     private javax.swing.JMenuItem jMenuIHistogrammeParametres;
     private javax.swing.JMenu jMenuImage;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
     private javax.swing.JMenuItem jMenuItemDilatation;
     private javax.swing.JMenuItem jMenuItemDilatationGeodesique;
@@ -1442,6 +2030,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JMenuItem nonlineairelaplacien;
     // End of variables declaration//GEN-END:variables
     
 }

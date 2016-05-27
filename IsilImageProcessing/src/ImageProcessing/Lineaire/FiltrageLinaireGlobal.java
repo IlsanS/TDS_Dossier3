@@ -38,6 +38,7 @@ public class FiltrageLinaireGlobal
                 Double rayon =Math.sqrt(Math.pow(distX, 2)+Math.pow(distY, 2));
                 if(rayon > fc)
                 {
+                   
                     matricePixelFourier .set(i,j,0,0);
                 }
                 

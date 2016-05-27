@@ -23,11 +23,12 @@ public class JDialogChoixParamètreFiltre extends javax.swing.JDialog {
         super(parent, modal);
        
         initComponents();
+          filtreNonIdeal=Nonideal;
         if(Nonideal == false)
         {
             this.jLabel2.setVisible(false);
             this.JspinnerOrdre.setVisible(false);
-            filtreNonIdeal=Nonideal;
+          
         }
             
  }

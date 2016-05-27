@@ -14,7 +14,7 @@ package ImageProcessing.Lineaire;
 public class FiltrageLineaireLocal 
 {
     
-     public static int[][] filtreMasqueConvolution(int[][] image,double[][] masque)
+     public static int[][] filtreMasqueConvolution(int[][] image,double [][] masque)
     {
         int ligne=image.length;
         int col=image[0].length;

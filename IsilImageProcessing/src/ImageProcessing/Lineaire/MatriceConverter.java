@@ -34,7 +34,14 @@ public class MatriceConverter
         {
             for(int j=0; j<f[0].length; j++)
             {
-                oldImage[i][j] = (int) f[i][j];
+               
+                if(f[i][j]<0)  oldImage[i][j] =(int) Math.round(-f[i][j]);
+                else 
+                {if(f[i][j]>255) oldImage[i][j]=255;
+                 else
+                 oldImage[i][j] = (int) Math.round(f[i][j]);
+                 
+                }
             }
         }
         
