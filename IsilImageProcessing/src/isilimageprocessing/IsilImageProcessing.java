@@ -92,6 +92,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         buttonGroupDessiner = new javax.swing.ButtonGroup();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jScrollPane = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuImage = new javax.swing.JMenu();
@@ -166,8 +167,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuItemEx1 = new javax.swing.JMenuItem();
         jMenuItemEx2 = new javax.swing.JMenuItem();
         jMenuItemEx3 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
 
         jMenuItem4.setText("jMenuItem4");
+
+        jMenuItem6.setText("jMenuItem6");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TestCImage3");
@@ -648,7 +653,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuApplications.setText("Applications");
 
-        jMenuItemEx1.setText("Exercice 1");
+        jMenuItemEx1.setText("1. Lena bruitée");
         jMenuItemEx1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemEx1ActionPerformed(evt);
@@ -656,7 +661,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenuApplications.add(jMenuItemEx1);
 
-        jMenuItemEx2.setText("Exercice 2");
+        jMenuItemEx2.setText("2. Lena égaliser");
         jMenuItemEx2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemEx2ActionPerformed(evt);
@@ -664,13 +669,29 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenuApplications.add(jMenuItemEx2);
 
-        jMenuItemEx3.setText("Exercice 3");
+        jMenuItemEx3.setText("3. Lune paraistée");
         jMenuItemEx3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItemEx3ActionPerformed(evt);
             }
         });
         jMenuApplications.add(jMenuItemEx3);
+
+        jMenuItem1.setText("4.Petits poids");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenuApplications.add(jMenuItem1);
+
+        jMenuItem7.setText("6.Tools");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenuApplications.add(jMenuItem7);
 
         jMenuBar1.add(jMenuApplications);
 
@@ -2054,6 +2075,147 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private void jMenuItemEx3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEx3ActionPerformed
       
     }//GEN-LAST:event_jMenuItemEx3ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+ 
+          try {
+           /*On  sépare les 3 composantes*/
+          imageRGB = new CImageRGB(new File("ImagesEtape5\\petitsPois.png"));
+          this.observer.setCImage(imageRGB);
+            int[][] rg_start = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+            int[][] gr_start = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+            int[][] b_start = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+            imageRGB.getMatricesRGB(rg_start, gr_start, b_start);
+            
+            int[][] vide = new int[rg_start.length][rg_start[0].length];
+            
+             /*Toutes les parties blanches vont devenir noires le rouge devient noir*/ 
+            
+            int[][] rg_hist = Histogramme.rehaussement(rg_start, Histogramme.creeCourbeTonaleNegatif());
+            int[][] b_hist = Histogramme.rehaussement(b_start, Histogramme.creeCourbeTonaleNegatif());
+
+            /*Toutes les parties blanches vont devenir noires le rouge devient noir je seuil pour 
+            avoir mes zones */ 
+  
+            int[][] r_seuil = Seuillage.seuillageAutomatique(b_hist);
+            int[][] b_seuil = Seuillage.seuillageAutomatique(rg_hist);
+
+       /*Initialisation des vecteur qui vont construire la partie bleu  */ 
+            int[][] rg_b = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+            int[][] gr_b = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+            int[][] B_b = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+
+         /*Dans la boucle on parcourt les 2 images en noir et blanc du seuillage, le vecteur des boule rouges
+            et celui des boules bleus.
+            Les composantes rouge et bleux sont au max et si on arrive pour l'un et pour l'autre et on test
+            si on est sur un pixel noir ou blanc si s'il est noir on met les pixel restant à 0 ainsi on a que 
+            le rouge ou le noir. Sinon on le met à 255 comme ça les 3 formes du blanc */ 
+            
+            for (int i = 0; i < r_seuil.length; ++i)
+                
+              for (int j = 0; j < r_seuil[0].length; ++j)
+              {
+                //pixel des matrice rouge - > la composante rouge est à fond
+                rg_start[i][j] = 255;
+                
+                //Si le pixel est boir on a pas de rond donc on a un fond blanc  -> b et g a 255
+                if (r_seuil[i][j] == 0)
+                {
+                  b_start[i][j] = 255;
+                  gr_start[i][j] = 255;
+                }
+                //Sinon Le pixel est blanc on a un rond -> rouge donc on met les composantes r et g à 0
+                else
+                {
+                  b_start[i][j] = 0;
+                  gr_start[i][j] = 0;
+                }
+
+                B_b[i][j] = 255;
+                if (b_seuil[i][j] == 0)
+                {
+                  rg_b[i][j] = 255;
+                  gr_b[i][j] = 255;
+                }
+                else
+                {
+                  rg_b[i][j] = 0;
+                  gr_b[i][j] = 0;
+                }
+              }
+
+
+ // érosion pour enlever les petites taches rouge et bleues 5 est la taille minimum sinon on les voit
+     CImageRGB finaleR = new CImageRGB(MorphoElementaire.erosion(rg_start,5), 
+                                       MorphoElementaire.erosion(gr_start,5),
+                                       MorphoElementaire.erosion( b_start,5));
+     
+     CImageRGB finaleB = new CImageRGB(MorphoElementaire.erosion(rg_b,5),
+                                        MorphoElementaire.erosion(gr_b,5), 
+                                        MorphoElementaire.erosion(B_b,5));
+
+      
+             JDialogShowImage dialog2 = new JDialogShowImage(this, false,finaleR);
+                dialog2.setVisible(true);
+        
+         JDialogShowImage dialog3 = new JDialogShowImage(this, false,finaleB);
+                dialog3.setVisible(true);
+        } catch (CImageRGBException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+try {
+     imageNG= new CImageNG(new File("ImagesEtape5\\tools.png"));
+         this.observer.setCImage(imageNG);
+                int[][] matInit;
+                matInit = imageNG.getMatrice();
+
+                /* Les objets disparaissent il ne reste plus que le fond en effet l'élement struct est trop grands
+                comme le premier operateur dans une ouverture est un érosion, les éléments disparaissent*/
+                int[][] matFinal = MorphoElementaire.ouverture(matInit, 21);
+                
+                 /* On soustrait le fonds*/
+                
+                for (int y = 0; y < matInit.length; ++y)
+                for (int x = 0; x < matInit[y].length; ++x)
+                { 
+                    matFinal[y][x] = matInit[y][x] - matFinal[y][x];
+                    if ( matFinal[y][x]<0 ) matFinal[y][x]=0;
+                    if ( matFinal[y][x]>255) matFinal[y][x]=255;
+
+                }
+                  /* On effectue un seuillage pour avoir une meilleure vue*/
+      
+             matFinal = Seuillage.seuillageAutomatique(matFinal);
+      
+              JDialogShowImage s = new JDialogShowImage(this, false, new CImageNG(matFinal));
+              s.setVisible(true);
+             // observer.setCImage(new CImageNG(matFinal));
+           } catch (CImageNGException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(IsilImageProcessing.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+        
+        
+        
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
     
     /**
      * @param args the command line arguments
@@ -2213,10 +2375,13 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuHistogrammeTransformations;
     private javax.swing.JMenuItem jMenuIHistogrammeParametres;
     private javax.swing.JMenu jMenuImage;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItemCouleurPinceau;
     private javax.swing.JMenuItem jMenuItemDilatation;
     private javax.swing.JMenuItem jMenuItemDilatationGeodesique;

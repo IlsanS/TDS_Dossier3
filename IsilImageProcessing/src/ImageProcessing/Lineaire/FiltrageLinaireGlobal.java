@@ -85,13 +85,14 @@ public class FiltrageLinaireGlobal
     
     public static int[][] PasseBasButterworth(int[][] image, int fc, int n)
     {
+        //  [F(u,v)]f
         MatriceComplexe matricePixelFourier = Fourier.Fourier2D(MatriceConverter.IntToDouble(image));
         matricePixelFourier = Fourier.decroise(matricePixelFourier);
-    
+     
         int nbLigne = matricePixelFourier.getLignes();
         int nbColonne = matricePixelFourier.getColonnes();
   
-        
+         //  Je parcours ma matrice de Fourier 
         for(int i=0; i<nbLigne; i++)
         {
             int distY = i - nbLigne/2;
@@ -102,13 +103,17 @@ public class FiltrageLinaireGlobal
                 
                 //Filtrage passe-haut Butterworth
                 Double rayon =Math.sqrt(Math.pow(distX, 2)+Math.pow(distY, 2));
+                
+                // calcul du coéfficient en fonction du rayon et de l'ordre n
+                // le rayon est au numérateur, lorsque u,v augmente le coef diminue
                 double coeffcient = 1 / (1+Math.pow(rayon/fc,2*n));  
                 
+                //multiplication du coefficient à la matrice
                 matricePixelFourier.get(i, j).multiplie(new Complexe(coeffcient, 0));
             }
         }
         
-        //4. [G(u,v) -> g(x,y)]
+        //  de la fonction frequentielle on passe en temporel
         return MatriceConverter.DoubleToInt(Fourier.InverseFourier2D(Fourier.decroise(matricePixelFourier)).getPartieReelle());
     }
     
@@ -118,7 +123,8 @@ public class FiltrageLinaireGlobal
         fourier2D = Fourier.decroise(fourier2D);
         int nbLigne = fourier2D.getLignes();
         int nbColonne = fourier2D.getColonnes();
-      
+        
+         //  Je parcours ma matrice de Fourier 
         for(int i=0; i<nbLigne; i++)
         {
             int distY = i -  nbLigne/2;
@@ -129,6 +135,9 @@ public class FiltrageLinaireGlobal
                 
                 //Filtrage passe-haut Butterworth
                 Double rayon =Math.sqrt(Math.pow(distX, 2)+Math.pow(distY, 2));
+                  // calcul du coéfficient en fonction du rayon et de l'ordre n
+                // le rayon est au denominateur, lorsque u,v diminue le coef diminue
+                
                 double coefficient = 1 / (1+Math.pow(frequenceCoupure/rayon,2*n));  
                 
                 fourier2D.get(i, j).multiplie(new Complexe(coefficient, 0));
@@ -137,7 +146,7 @@ public class FiltrageLinaireGlobal
        
         fourier2D.set( nbLigne/2, nbColonne/2, 128, 0);
         
-        //4. [G(u,v) -> g(x,y)]
+        //  de la fonction frequentielle on passe en temporel
         return MatriceConverter.DoubleToInt(Fourier.InverseFourier2D(Fourier.decroise(fourier2D)).getPartieReelle());
     }
 }
