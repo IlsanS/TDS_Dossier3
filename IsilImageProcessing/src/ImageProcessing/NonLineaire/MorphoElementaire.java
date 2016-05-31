@@ -11,6 +11,7 @@ public class MorphoElementaire
         int[][] imageNew = new int[xSize][ySize];
         boolean isBinary;
         
+        //test image binaire ou niveaux gris
         isBinary = isBinary(image);
         
         if(isBinary)
@@ -38,6 +39,7 @@ public class MorphoElementaire
         {
             for(int xImage=0; xImage<xSize; xImage++)
             {
+                //on considère l'élément structurant inclus dans l'objet
                 included=true;
                 for(int yStruct=yImage-(tailleElemStruct-1)/2; yStruct<=yImage+(tailleElemStruct-1)/2; yStruct++)
                 {
@@ -45,6 +47,8 @@ public class MorphoElementaire
                     {
                         if(xStruct>=0 && yStruct>=0 && xStruct<xSize && yStruct<ySize)
                         {
+                            //au premier pixel de l'élément structurant non inclus dans l'objet, 
+                            //on considère l'élément structurant non inclus dans l'objet
                             if(image[xStruct][yStruct] != 0)
                             {
                                 included=false;
@@ -55,7 +59,10 @@ public class MorphoElementaire
                     if(!included)
                         break;
                 }
-
+                
+                //si l'élément structurant est inclus dans l'objet, le nouveau
+                //pixel considéré est mis à 0, donc forme l'objet
+                //sinon il est mis à 255 comme l'arrière plan
                 if(included)
                     imageNew[xImage][yImage] = 0;
                 else imageNew[xImage][yImage] = 255;
@@ -76,6 +83,7 @@ public class MorphoElementaire
         {
             for(int xImage=0; xImage<xSize; xImage++)
             {
+                //on assigne au minimum la plus grande valeur possible
                 minimum=255;
                 for(int yStruct=yImage-(tailleElemStruct-1)/2; yStruct<=yImage+(tailleElemStruct-1)/2; yStruct++)
                 {
@@ -83,12 +91,18 @@ public class MorphoElementaire
                     {
                         if(xStruct>=0 && yStruct>=0 && xStruct<xSize && yStruct<ySize)
                         {
+                            //pour chaque pixel de l'élément structurant, si la valeur
+                            //du pixel est plus petite que le précédent minimum,
+                            //c'est cette valeur qui est gardée
                             pixelValue = image[xStruct][yStruct];
                             if(pixelValue<minimum)
                                 minimum = pixelValue;
                         }
                     }
                 }
+                
+                //le nouveau pixel considéré a la valeur du minimum des pixels
+                //de l'élément structurant
                 imageNew[xImage][yImage] = minimum;
             }
         }
@@ -103,6 +117,7 @@ public class MorphoElementaire
         int[][] imageNew = new int[xSize][ySize];
         boolean isBinary;
         
+        //test image binaire ou niveaux gris
         isBinary = isBinary(image);
         
         if(isBinary)
@@ -130,6 +145,7 @@ public class MorphoElementaire
         {
             for(int xImage=0; xImage<xSize; xImage++)
             {
+                //on considère que l'élément structurant ne touche par l'objet
                 touch=false;
                 for(int yStruct=yImage-(tailleElemStruct-1)/2; yStruct<=yImage+(tailleElemStruct-1)/2; yStruct++)
                 {
@@ -137,6 +153,8 @@ public class MorphoElementaire
                     {
                         if(xStruct>=0 && yStruct>=0 && xStruct<xSize && yStruct<ySize)
                         {
+                            //au premier pixel de l'élément structurant inclus dans l'objet, 
+                            //on considère l'élément structurant comme touchant l'objet 
                             if(image[xStruct][yStruct] == 0)
                             {
                                 touch=true;
@@ -147,6 +165,10 @@ public class MorphoElementaire
                     if(touch)
                         break;
                 }
+                
+                //si l'élément structurant touche l'objet, le nouveau
+                //pixel considéré est mis à 0, donc forme l'objet
+                //sinon il est mis à 255 comme l'arrière plan
                 if(touch)
                     imageNew[xImage][yImage] = 0;
                 else imageNew[xImage][yImage] = 255;
@@ -168,6 +190,7 @@ public class MorphoElementaire
         {
             for(int xImage=0; xImage<xSize; xImage++)
             {
+                //on assigne au minimum la plus petite valeur possible
                 maximum=0;
                 for(int yStruct=yImage-(tailleElemStruct-1)/2; yStruct<=yImage+(tailleElemStruct-1)/2; yStruct++)
                 {
@@ -175,12 +198,18 @@ public class MorphoElementaire
                     {
                         if(xStruct>=0 && yStruct>=0 && xStruct<xSize && yStruct<ySize)
                         {
+                            //pour chaque pixel de l'élément structurant, si la valeur
+                            //du pixel est plus grande que le précédent maximum,
+                            //c'est cette valeur qui est gardée
                             pixelValue = image[xStruct][yStruct];
                             if(pixelValue>maximum)
                                 maximum = pixelValue;
                         }
                     }
                 }
+                
+                //le nouveau pixel considéré a la valeur du maximum des pixels
+                //de l'élément structurant
                 imageNew[xImage][yImage] = maximum;
             }
         }
@@ -195,6 +224,7 @@ public class MorphoElementaire
         int[][] imageNew = new int[xSize][ySize];
         boolean isBinary;
         
+        //test image binaire ou niveaux gris
         isBinary = isBinary(image);
         
         if(isBinary)
@@ -220,6 +250,7 @@ public class MorphoElementaire
         int[][] imageNew = new int[xSize][ySize];
         boolean isBinary;
         
+        //test image binaire ou niveaux gris
         isBinary = isBinary(image);
         
         if(isBinary)
@@ -249,6 +280,8 @@ public class MorphoElementaire
         {
             for(int xImage=0; xImage<xSize; xImage++)
             {
+                //au premier pixel différent de 0 ou 255, on retourne false
+                //l'image est en niveaux de gris et pas binaire
                 pixelValue = image[xImage][yImage];
                 if(pixelValue != 0 && pixelValue != 255)
                 {
