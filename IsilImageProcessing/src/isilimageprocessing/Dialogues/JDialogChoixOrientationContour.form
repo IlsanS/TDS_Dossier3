@@ -33,7 +33,7 @@
                       <Component id="JspinnerOrdre" min="-2" pref="210" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="25" max="32767" attributes="0"/>
+              <EmptySpace pref="11" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -45,8 +45,9 @@
                   <Component id="jLabel2" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
                   <Component id="JspinnerOrdre" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="ButtonOk" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -62,7 +63,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ordre"/>
+        <Property name="text" type="java.lang.String" value="Orientation"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSpinner" name="JspinnerOrdre">

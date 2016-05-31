@@ -59,6 +59,11 @@ public class JDialogChoixGeodesique extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Choix des paramètres géodésiques");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jSpinnerTailleMasque.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(2)));
 
@@ -124,7 +129,6 @@ public class JDialogChoixGeodesique extends javax.swing.JDialog {
 
         jButtonOk.getAccessibleContext().setAccessibleDescription("");
 
-        getAccessibleContext().setAccessibleName("Choix des paramètres géodésiques");
         getAccessibleContext().setAccessibleDescription("");
 
         pack();
@@ -134,7 +138,6 @@ public class JDialogChoixGeodesique extends javax.swing.JDialog {
         tailleMasque = (Integer) jSpinnerTailleMasque.getValue();
         nbIter = (Integer) jSpinnerIterations.getValue();
         setVisible(false);
-        dispose();
     }//GEN-LAST:event_jButtonOkActionPerformed
 
     private void jButtonMasqueGeoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMasqueGeoActionPerformed
@@ -159,6 +162,10 @@ public class JDialogChoixGeodesique extends javax.swing.JDialog {
         }        
         jScrollPaneImage.setViewportView(new JLabel(new ImageIcon(f.getPath())));
     }//GEN-LAST:event_jButtonMasqueGeoActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosing
 
     public int getTailleMasque()
     {

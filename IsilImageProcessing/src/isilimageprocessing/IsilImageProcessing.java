@@ -147,21 +147,25 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         jMenuLocal = new javax.swing.JMenu();
         jMenuConvo = new javax.swing.JMenuItem();
         jMenuMoyenneur = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        jMenuContours = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         butcher = new javax.swing.JMenuItem();
         nonlineairelaplacien = new javax.swing.JMenuItem();
         gradienterosion = new javax.swing.JMenuItem();
         gradientDilatation = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItemSobel = new javax.swing.JMenuItem();
         Prewitt = new javax.swing.JMenuItem();
         LaPlacien4 = new javax.swing.JMenuItem();
         LaPlacien8 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuSeuillage = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuApplications = new javax.swing.JMenu();
+        jMenuItemEx1 = new javax.swing.JMenuItem();
+        jMenuItemEx2 = new javax.swing.JMenuItem();
+        jMenuItemEx3 = new javax.swing.JMenuItem();
 
         jMenuItem4.setText("jMenuItem4");
 
@@ -538,7 +542,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
 
         jMenuBar1.add(jMenuLineaire);
 
-        jMenu1.setText("Contours ");
+        jMenuContours.setText("Contours ");
 
         jMenu4.setText("Non Lineaire");
 
@@ -574,17 +578,17 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenu4.add(gradientDilatation);
 
-        jMenu1.add(jMenu4);
+        jMenuContours.add(jMenu4);
 
         jMenu3.setText("Lineaire");
 
-        jMenuItem1.setText("Grandient Sobel");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemSobel.setText("Grandient Sobel");
+        jMenuItemSobel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuItemSobelActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem1);
+        jMenu3.add(jMenuItemSobel);
 
         Prewitt.setText("Gradient Prewitt");
         Prewitt.addActionListener(new java.awt.event.ActionListener() {
@@ -610,11 +614,11 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         });
         jMenu3.add(LaPlacien8);
 
-        jMenu1.add(jMenu3);
+        jMenuContours.add(jMenu3);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(jMenuContours);
 
-        jMenu2.setText("Seuillage");
+        jMenuSeuillage.setText("Seuillage");
 
         jMenuItem3.setText("Simple");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -622,7 +626,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem3);
+        jMenuSeuillage.add(jMenuItem3);
 
         jMenuItem5.setText("Double");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
@@ -630,7 +634,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 jMenuItem5ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem5);
+        jMenuSeuillage.add(jMenuItem5);
 
         jMenuItem2.setText("Automatique");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -638,9 +642,37 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jMenuSeuillage.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(jMenuSeuillage);
+
+        jMenuApplications.setText("Applications");
+
+        jMenuItemEx1.setText("Exercice 1");
+        jMenuItemEx1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEx1ActionPerformed(evt);
+            }
+        });
+        jMenuApplications.add(jMenuItemEx1);
+
+        jMenuItemEx2.setText("Exercice 2");
+        jMenuItemEx2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEx2ActionPerformed(evt);
+            }
+        });
+        jMenuApplications.add(jMenuItemEx2);
+
+        jMenuItemEx3.setText("Exercice 3");
+        jMenuItemEx3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEx3ActionPerformed(evt);
+            }
+        });
+        jMenuApplications.add(jMenuItemEx3);
+
+        jMenuBar1.add(jMenuApplications);
 
         setJMenuBar(jMenuBar1);
 
@@ -1003,9 +1035,15 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemOuvrirRGBActionPerformed
 
     private void jMenuItemErosionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemErosionActionPerformed
-        JDialogChoixTailleElemStruct dialog = new JDialogChoixTailleElemStruct(this,true,tailleElemStruct);
+        //créer la boite de dialogue pour le choix de taille de l'élement structurant
+        JDialogChoixTailleElemStruct dialog = 
+                new JDialogChoixTailleElemStruct(this,true,tailleElemStruct);
         dialog.setVisible(true);
+        
+        //récupération de la taille de l'élément structurant
         tailleElemStruct = dialog.getTailleMasque();
+        
+        //érosion + affichage image modifiée
         try
         {
             this.imageNG.setMatrice(MorphoElementaire.erosion(imageNG.getMatrice(), tailleElemStruct));
@@ -1017,9 +1055,15 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemErosionActionPerformed
 
     private void jMenuItemDilatationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDilatationActionPerformed
-        JDialogChoixTailleElemStruct dialog = new JDialogChoixTailleElemStruct(this,true,tailleElemStruct);
+        //créer la boite de dialogue pour le choix de taille de l'élement structurant
+        JDialogChoixTailleElemStruct dialog = 
+                new JDialogChoixTailleElemStruct(this,true,tailleElemStruct);
         dialog.setVisible(true);
+        
+        //récupération de la taille de l'élément structurant
         tailleElemStruct = dialog.getTailleMasque();
+        
+        //dilatation + affichage image modifiée
         try
         {
             this.imageNG.setMatrice(MorphoElementaire.dilatation(imageNG.getMatrice(), tailleElemStruct));
@@ -1031,9 +1075,15 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemDilatationActionPerformed
 
     private void jMenuItemOuvertureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOuvertureActionPerformed
-        JDialogChoixTailleElemStruct dialog = new JDialogChoixTailleElemStruct(this,true,tailleElemStruct);
+        //créer la boite de dialogue pour le choix de taille de l'élement structurant
+        JDialogChoixTailleElemStruct dialog = 
+                new JDialogChoixTailleElemStruct(this,true,tailleElemStruct);
         dialog.setVisible(true);
+        
+        //récupération de la taille de l'élément structurant
         tailleElemStruct = dialog.getTailleMasque();
+        
+        //ouverture + affichage image modifiée
         try
         {
             this.imageNG.setMatrice(MorphoElementaire.ouverture(imageNG.getMatrice(), tailleElemStruct));
@@ -1045,9 +1095,15 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemOuvertureActionPerformed
 
     private void jMenuItemFermetureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFermetureActionPerformed
-        JDialogChoixTailleElemStruct dialog = new JDialogChoixTailleElemStruct(this,true,tailleElemStruct);
+       //créer la boite de dialogue pour le choix de taille de l'élement structurant
+        JDialogChoixTailleElemStruct dialog = 
+                new JDialogChoixTailleElemStruct(this,true,tailleElemStruct);
         dialog.setVisible(true);
+        
+        //récupération de la taille de l'élément structurant
         tailleElemStruct = dialog.getTailleMasque();
+        
+        //fermeture + affichage image modifiée
         try
         {
             this.imageNG.setMatrice(MorphoElementaire.fermeture(imageNG.getMatrice(), tailleElemStruct));
@@ -1059,51 +1115,79 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     }//GEN-LAST:event_jMenuItemFermetureActionPerformed
 
     private void jMenuItemDilatationGeodesiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDilatationGeodesiqueActionPerformed
+        //créer la boite de dialogue pour le choix des paramètres géodésiques
         JDialogChoixGeodesique dialog = 
                 new JDialogChoixGeodesique(this,true,tailleElemStruct,iterations,masqueGeodesique);
         dialog.setVisible(true);
-        tailleElemStruct = dialog.getTailleMasque();
-        iterations = dialog.getNombreIterations();
-        masqueGeodesique = dialog.getMasqueGeodesique();
-        try
+        
+        //si on a pas quitté la boite de dialogue avec la croix
+        if(dialog.isDisplayable())
         {
-            this.imageNG.setMatrice(MorphoComplexe.dilatationGeodesique(
-                    imageNG.getMatrice(), masqueGeodesique, tailleElemStruct, iterations));
-        }
-        catch(CImageNGException ex)
-        {
-            System.err.println("Erreur NG : " + ex.getMessage());
+            //récupération des paramètres choisis
+            tailleElemStruct = dialog.getTailleMasque();
+            iterations = dialog.getNombreIterations();
+            masqueGeodesique = dialog.getMasqueGeodesique();
+            
+            //dilatation géodésique + affichage de l'image modifiée
+            try
+            {
+                this.imageNG.setMatrice(MorphoComplexe.dilatationGeodesique(
+                        imageNG.getMatrice(), masqueGeodesique, tailleElemStruct, iterations));
+            }
+            catch(CImageNGException ex)
+            {
+                System.err.println("Erreur NG : " + ex.getMessage());
+            }
         }
     }//GEN-LAST:event_jMenuItemDilatationGeodesiqueActionPerformed
 
     private void jMenuItemReconstructionGeodesiqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemReconstructionGeodesiqueActionPerformed
+        //créer la boite de dialogue pour le choix des paramètres géodésiques
         JDialogChoixGeodesique dialog = 
                 new JDialogChoixGeodesique(this,true,tailleElemStruct,-1,masqueGeodesique);
         dialog.setVisible(true);
-        tailleElemStruct = dialog.getTailleMasque();
-        masqueGeodesique = dialog.getMasqueGeodesique();
-        try
+        
+        //si on a pas quitté la boite de dialogue avec la croix
+        if(dialog.isDisplayable())
         {
-            this.imageNG.setMatrice(MorphoComplexe.reconstructionGeodesique(
-                    imageNG.getMatrice(), masqueGeodesique, tailleElemStruct));
-        }
-        catch(CImageNGException ex)
-        {
-            System.err.println("Erreur NG : " + ex.getMessage());
+            //récupération des paramètres choisis
+            tailleElemStruct = dialog.getTailleMasque();
+            masqueGeodesique = dialog.getMasqueGeodesique();
+            
+            //reconstruction géodésique + affichage de l'image modifiée
+            try
+            {
+                this.imageNG.setMatrice(MorphoComplexe.reconstructionGeodesique(
+                        imageNG.getMatrice(), masqueGeodesique, tailleElemStruct));
+            }
+            catch(CImageNGException ex)
+            {
+                System.err.println("Erreur NG : " + ex.getMessage());
+            }
         }
     }//GEN-LAST:event_jMenuItemReconstructionGeodesiqueActionPerformed
 
     private void jMenuItemFiltreMedianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFiltreMedianActionPerformed
-        JDialogChoixTailleElemStruct dialog = new JDialogChoixTailleElemStruct(this,true,tailleElemStruct);
+        //créer la boite de dialogue pour le choix de taille de l'élément structurant
+        JDialogChoixTailleElemStruct dialog = 
+                new JDialogChoixTailleElemStruct(this,true,tailleElemStruct);
         dialog.setVisible(true);
-        tailleElemStruct = dialog.getTailleMasque();
-        try
+        
+        //si on a pas quitté la boite de dialogue avec la croix
+        if(dialog.isDisplayable())
         {
-            this.imageNG.setMatrice(MorphoComplexe.filtreMedian(imageNG.getMatrice(), tailleElemStruct));
-        }
-        catch(CImageNGException ex)
-        {
-            System.err.println("Erreur NG : " + ex.getMessage());
+            //récupération des paramètres choisis
+            tailleElemStruct = dialog.getTailleMasque();
+            
+            //filtre médian + affichage de l'image modifiée
+            try
+            {
+                this.imageNG.setMatrice(MorphoComplexe.filtreMedian(imageNG.getMatrice(), tailleElemStruct));
+            }
+            catch(CImageNGException ex)
+            {
+                System.err.println("Erreur NG : " + ex.getMessage());
+            }
         }
     }//GEN-LAST:event_jMenuItemFiltreMedianActionPerformed
 
@@ -1487,7 +1571,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
        }
     }//GEN-LAST:event_PrewittActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItemSobelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSobelActionPerformed
 
  JDialogChoixOrientationContour dialog = new JDialogChoixOrientationContour(this,true);
         dialog.setVisible(true);
@@ -1513,7 +1597,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
        }
 
 
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItemSobelActionPerformed
 
     private void LaPlacien4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LaPlacien4ActionPerformed
 
@@ -1829,6 +1913,147 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
        }
 
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItemEx1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEx1ActionPerformed
+        
+        //chargement de l'image bruitée
+        try 
+        {
+            imageRGB = new CImageRGB(new File("ImagesEtape5\\lenaBruit.png"));
+            observer.setCImage(imageRGB);
+            
+            //génération des matrices R, G et B
+            splitMatrice(imageRGB);        
+        } 
+        catch(IOException ex) 
+        {
+            System.err.println("Erreur IO : " + ex.getMessage());
+        }
+        catch(CImageRGBException ex)
+        {
+            System.err.println("Erreur RGB : " + ex.getMessage());
+        }
+        
+        //si l'image a pu être chargée
+        if(imageRGB != null)
+        {
+            try
+            {
+                Rimg = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+                Gimg = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+                Bimg = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+
+                imageRGB.getMatricesRGB(Rimg, Gimg, Bimg);
+
+                Rimg = MorphoComplexe.filtreMedian(Rimg, 3);
+                Gimg = MorphoComplexe.filtreMedian(Gimg, 3);
+                Bimg = MorphoComplexe.filtreMedian(Bimg, 3);
+
+                CImageRGB newImageRGB = new CImageRGB(Rimg, Gimg, Bimg);
+                
+                JDialogShowImage dialog = new JDialogShowImage(this, false, newImageRGB);
+                dialog.setVisible(true);
+            }
+            catch(CImageRGBException ex)
+            {
+                System.err.println("Erreur RGB : " + ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_jMenuItemEx1ActionPerformed
+
+    private void jMenuItemEx2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEx2ActionPerformed
+        int[] courbeTonaleRed = new int[256];
+        int[] courbeTonaleGreen = new int[256];
+        int[] courbeTonaleBlue = new int[256];
+        int[] courbeTonaleNG = new int[256];
+        int[][] NG;
+        
+        //chargement de l'image à égaliser
+        try 
+        {
+            imageRGB = new CImageRGB(new File("ImagesEtape5\\lenaAEgaliser.jpg"));
+            observer.setCImage(imageRGB);
+        } 
+        catch(IOException ex) 
+        {
+            System.err.println("Erreur IO " + ex.getMessage());
+        }
+        
+        //si l'image a pu être chargée
+        if(imageRGB != null)
+        {
+            //première méthode
+            try
+            {
+                //création des matrices R, G, et B selon la taille de l'image
+                Rimg = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+                Gimg = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+                Bimg = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+                
+                //récupération des matrices R, G et B
+                imageRGB.getMatricesRGB(Rimg, Gimg, Bimg);
+                
+                //création des courbes tonales d'égalisation pour chaque couleur
+                courbeTonaleRed = Histogramme.creeCourbeTonaleEgalisation(Rimg);
+                courbeTonaleGreen = Histogramme.creeCourbeTonaleEgalisation(Gimg);
+                courbeTonaleBlue = Histogramme.creeCourbeTonaleEgalisation(Bimg);
+                
+                //rehaussement pour chaque couleur selon sa propre courbe tonale
+                Rimg = Histogramme.rehaussement(Rimg, courbeTonaleRed);
+                Gimg = Histogramme.rehaussement(Gimg, courbeTonaleGreen);
+                Bimg = Histogramme.rehaussement(Bimg, courbeTonaleBlue);
+                
+                //création de l'image égalisée à partir des matrices R, G et B
+                CImageRGB newImageRGB = new CImageRGB(Rimg, Gimg, Bimg);
+                
+                //affichage de l'image égalisée
+                JDialogShowImage dialog = new JDialogShowImage(this, false, newImageRGB);
+                dialog.setVisible(true);                
+            }
+            catch(CImageRGBException ex)
+            {
+                System.err.println("Erreur RGB : " + ex.getMessage());
+            }
+            
+            //seconde méthode
+            try
+            {
+                //création de la matrices NG selon la taille de l'image
+                NG = new int[imageRGB.getLargeur()][imageRGB.getHauteur()];
+                
+                //récupération des matrices R, G et B et NG
+                imageRGB.getMatricesRGB(Rimg, Gimg, Bimg);
+                NG = imageRGB.getCImageNG().getMatrice();
+                
+                //création de la courbe tonale d'égalisation en NG
+                courbeTonaleNG = Histogramme.creeCourbeTonaleEgalisation(NG);
+                
+                //rehaussement pour chaque couleur selon la courbe tonale NG
+                Rimg = Histogramme.rehaussement(Rimg, courbeTonaleNG);
+                Gimg = Histogramme.rehaussement(Gimg, courbeTonaleNG);
+                Bimg = Histogramme.rehaussement(Bimg, courbeTonaleNG);
+                
+                //création de l'image égalisée à partir des matrices R, G et B
+                CImageRGB newImageRGB = new CImageRGB(Rimg, Gimg, Bimg);
+                
+                //affichage de l'image égalisée
+                JDialogShowImage dialog = new JDialogShowImage(this, false, newImageRGB);
+                dialog.setVisible(true);                
+            }
+            catch(CImageRGBException ex)
+            {
+                System.err.println("Erreur RGB : " + ex.getMessage());
+            } 
+            catch (CImageNGException ex) 
+            {
+                System.err.println("Erreur NG : " + ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_jMenuItemEx2ActionPerformed
+
+    private void jMenuItemEx3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEx3ActionPerformed
+      
+    }//GEN-LAST:event_jMenuItemEx3ActionPerformed
     
     /**
      * @param args the command line arguments
@@ -1949,13 +2174,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
         }
     }
     
-    private void splitMatrice(CImageRGB im) throws CImageRGBException, CImageNGException
+    private void splitMatrice(CImageRGB im) throws CImageRGBException
     {
         Rimg = new int[im.getLargeur()][im.getHauteur()];
         Gimg = new int[im.getLargeur()][im.getHauteur()];
         Bimg = new int[im.getLargeur()][im.getHauteur()];
-        im.getMatricesRGB(Rimg, Gimg, Bimg);
-   
+        im.getMatricesRGB(Rimg, Gimg, Bimg);   
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1972,12 +2196,12 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerPixel;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerRectangle;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItemDessinerRectanglePlein;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenuApplications;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuComplexe;
+    private javax.swing.JMenu jMenuContours;
     private javax.swing.JMenuItem jMenuConvo;
     private javax.swing.JMenu jMenuDessiner;
     private javax.swing.JMenu jMenuElementaire;
@@ -1989,7 +2213,6 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenu jMenuHistogrammeTransformations;
     private javax.swing.JMenuItem jMenuIHistogrammeParametres;
     private javax.swing.JMenu jMenuImage;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
@@ -2000,6 +2223,9 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemEgalisation;
     private javax.swing.JMenuItem jMenuItemEnregistrerSous;
     private javax.swing.JMenuItem jMenuItemErosion;
+    private javax.swing.JMenuItem jMenuItemEx1;
+    private javax.swing.JMenuItem jMenuItemEx2;
+    private javax.swing.JMenuItem jMenuItemEx3;
     private javax.swing.JMenuItem jMenuItemFermeture;
     private javax.swing.JMenuItem jMenuItemFiltreMedian;
     private javax.swing.JMenuItem jMenuItemFourierAfficherModule;
@@ -2016,6 +2242,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuItemOuvrirNG;
     private javax.swing.JMenuItem jMenuItemOuvrirRGB;
     private javax.swing.JMenuItem jMenuItemReconstructionGeodesique;
+    private javax.swing.JMenuItem jMenuItemSobel;
     private javax.swing.JMenu jMenuLineaire;
     private javax.swing.JMenu jMenuLocal;
     private javax.swing.JMenuItem jMenuMoyenneur;
@@ -2026,6 +2253,7 @@ public class IsilImageProcessing extends javax.swing.JFrame implements ClicListe
     private javax.swing.JMenuItem jMenuPH;
     private javax.swing.JMenuItem jMenuPHButter;
     private javax.swing.JMenuItem jMenuQuitter;
+    private javax.swing.JMenu jMenuSeuillage;
     private javax.swing.JMenu jMenuTraitementNonLineaire;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JSeparator jSeparator1;

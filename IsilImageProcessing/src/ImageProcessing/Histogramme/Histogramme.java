@@ -88,6 +88,7 @@ public class Histogramme
         return luminance;
     }
     
+    //formule de l'écart-type
     public static double contraste1(int[][] image)
     {
         int xSize = image.length;
@@ -109,6 +110,7 @@ public class Histogramme
         return contraste;
     }
     
+    //formule des niveaux de gris min et max
     public static double contraste2(int[][] image)
     {
         int xSize = image.length;
@@ -144,6 +146,8 @@ public class Histogramme
         {
             for(int xImage=0; xImage<xSize; xImage++)
             {
+                //la nouvelle valeur du pixel considéré est celle définie par
+                //la courbe tonale
                 imageNew[xImage][yImage] = courbeTonale[image[xImage][yImage]];
             }
         }
@@ -198,9 +202,13 @@ public class Histogramme
         double[] histoNorm = new double[256];
         double[] histoFreqCumul = new double[256];
         
+        //on récupère l'histogramme normalisé
         histoNorm = histogrammeNormalise(image);
+        
+        //on récupère l'histogramme des fréquences cumulées
         histoFreqCumul = histogrammeFreqCumul(histoNorm);
         
+        //création de la courbe tonale
         for(int i=0; i<256; i++)
         {
             courbeTonale[i] = (int) Math.round(255.*histoFreqCumul[i]);
@@ -218,6 +226,7 @@ public class Histogramme
         
         histo = Histogramme256(image);
         
+        //calcul de la probabilité de chaque niveau de gris
         for(int i=0; i<256; i++)
         {
             histoNorm[i] = (double) histo[i]/(xSize*ySize);
@@ -231,6 +240,7 @@ public class Histogramme
         double[] histoFreqCumul = new double[256];
         double sum = 0;        
         
+        //calcul des fréquences cumulées
         for(int i=0; i<256; i++)
         {
             sum += histoNorm[i];
